@@ -43,8 +43,12 @@ app.post("/register", (request, response) => {
     .then((hashedPassword) => {
       // create a new user instance and collect the data
       const user = new User({
+        name: request.body.name,
         email: request.body.email,
         password: hashedPassword,
+        address: request.body.address,
+        connection:request.body.connection,
+        employee:request.body.employee,
       });
 
       // save the new user
@@ -107,11 +111,20 @@ app.post("/login", (request, response) => {
           );
 
           //   return success response
+          if(user.employee==1){
           response.status(200).send({
-            message: "Login Successful",
+            message: "Admin Login Successful",
             email: user.email,
             token,
           });
+         }
+          else{
+            response.status(200).send({
+              message: "User Login Successful",
+              email: user.email,
+              token,
+            });
+          }
         })
         // catch error if password do not match
         .catch((error) => {
