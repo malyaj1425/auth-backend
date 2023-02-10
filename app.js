@@ -121,7 +121,9 @@ app.post("/login", (request, response) => {
           else{
             response.status(200).send({
               message: "User Login Successful",
+              name: user.name,
               email: user.email,
+              address: user.address,
               token,
             });
           }
@@ -143,6 +145,8 @@ app.post("/login", (request, response) => {
     });
 });
 
+
+
 // free endpoint
 app.get("/free-endpoint", (request, response) => {
   response.json({ message: "You are free to access me anytime" });
@@ -152,5 +156,23 @@ app.get("/free-endpoint", (request, response) => {
 app.get("/auth-endpoint", auth, (request, response) => {
   response.send({ message: "You are authorized to access me" });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = app;
