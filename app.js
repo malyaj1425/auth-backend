@@ -206,6 +206,21 @@ app.get("/auth-endpoint", auth, (request, response) => {
   response.send({ message: "You are authorized to access me" });
 });
 
+app.post("/display",(request,response)=>{
+  User.find()
+   .then((user)=>{
+    response.status(200).send({
+      message: "data displayed",
+      result:user,
+    });
+   })
+   .catch((e)=>{
+    response.status(404).send({
+      message: "something went wrong",
+      e,
+    });
+   })
+})
 
 
 
