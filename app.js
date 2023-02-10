@@ -117,8 +117,8 @@ app.post("/connect",(request,response)=>{
         });
       }
       else{
-        User.updateOne(
-          {email:user.email},{
+        user.updateOne(
+          {email:'John1234@gmail.com'},{
             $set:{connection:1}
           }
         )
@@ -127,6 +127,12 @@ app.post("/connect",(request,response)=>{
         });
       }
     })
+    .catch((e) => {
+      response.status(404).send({
+        message: "Email not found",
+        e,
+      });
+    });
 });
 // login endpoint
 app.post("/login", (request, response) => {
