@@ -107,33 +107,25 @@ app.post("/book", (request, response) => {
           });
         });
 });
-
 app.post("/connect",(request,response)=>{
-  User.findOne({email:request.body.email})
-    .then((user)=>{
-      if(user.connection==1){
-        response.status(200).send({
-          message: "Connection exists",
-        });
-      }
-      else{
-        user.updateOne(
-          {email:'John1234@gmail.com'},{
-            $set:{connection:1}
-          }
-        )
-        response.status(200).send({
-          message: "Connection Successful",
-        });
-      }
-    })
-    .catch((e) => {
+  User.updateOne(
+    {email:request.body.email},{
+      $set:{connection:1}
+    }
+  )
+  .then((user)=>{
+    response.status(200).send({
+      message: "Connection Applied",
+    });
+  })
+  .catch((e)=>{
       response.status(404).send({
         message: "Email not found",
         e,
       });
-    });
+  })
 });
+
 // login endpoint
 app.post("/login", (request, response) => {
   // check if email exists
