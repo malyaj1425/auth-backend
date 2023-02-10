@@ -9,12 +9,12 @@ const BookingSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Please provide an Email!"],
-    unique: [true, "Email Exist"],
+    unique: [false, "Email Exist"],
   },
   address: {
     type: String,
     required: [true, "Please provide a name"],
-    unique: true,
+    unique: false,
   },
   payment:{
     type:String,
