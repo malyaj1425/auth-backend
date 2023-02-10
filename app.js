@@ -108,6 +108,26 @@ app.post("/book", (request, response) => {
         });
 });
 
+app.post("/connect",(request,response)=>{
+  User.findOne({email:request.body.email})
+    .then((user)=>{
+      if(user.connection==1){
+        response.status(200).send({
+          message: "Connection exists",
+        });
+      }
+      else{
+        User.updateOne(
+          {email:user.email},{
+            $set:{connection:1}
+          }
+        )
+        response.status(200).send({
+          message: "Connection Successful",
+        });
+      }
+    })
+});
 // login endpoint
 app.post("/login", (request, response) => {
   // check if email exists
@@ -154,6 +174,7 @@ app.post("/login", (request, response) => {
               name: user.name,
               email: user.email,
               address: user.address,
+              connection: user.connection,
               token,
             });
           }
