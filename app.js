@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 // require database connection
 const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
+const Booking = require("./db/Booking");
 const auth = require("./auth");
 
 // execute database connection
@@ -76,6 +77,35 @@ app.post("/register", (request, response) => {
         e,
       });
     });
+});
+
+app.post("/book", (request, response) => {
+  // hash the password
+      // create a new user instance and collect the data
+      const booking = new Booking({
+        name: request.body.name,
+        email: request.body.email,
+        address: request.body.address,
+        payment: request.body.payment
+      });
+
+      // save the new user
+      booking
+        .save()
+        // return success if the new user is added to the database successfully
+        .then((result) => {
+          response.status(201).send({
+            message: "Booking Created Successfully",
+            result,
+          });
+        })
+        // catch erroe if the new user wasn't added successfully to the database
+        .catch((error) => {
+          response.status(500).send({
+            message: "Error creating Booking",
+            error,
+          });
+        });
 });
 
 // login endpoint
