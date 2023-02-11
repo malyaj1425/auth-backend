@@ -210,7 +210,24 @@ app.post("/deletetransfer",(request,response)=>{
   )
   .then((user)=>{
     response.status(200).send({
-      message: "Transfer Delete",
+      message: "Transfer Deleted",
+    });
+    
+  })
+  .catch((e)=>{
+      response.status(404).send({
+        message: "Email not found",
+        e,
+      });
+  })
+});
+app.post("/deletebooking",(request,response)=>{
+  Booking.remove(
+    {email:request.body.email}
+  )
+  .then((user)=>{
+    response.status(200).send({
+      message: "Transfer Deleted",
     });
     
   })
@@ -260,7 +277,11 @@ app.post("/login", (request, response) => {
           if(user.employee==1){
           response.status(200).send({
             message: "Admin Login Successful",
-            email: user.email,
+            name: user.name,
+              email: user.email,
+              address: user.address,
+              connection: user.connection,
+              employee: user.employee,
             token,
           });
          }
@@ -271,6 +292,7 @@ app.post("/login", (request, response) => {
               email: user.email,
               address: user.address,
               connection: user.connection,
+              employee: user.employee,
               token,
             });
           }
