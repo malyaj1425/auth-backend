@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
 const Booking = require("./db/Booking");
+const Connections = require("./db/Connection");
+const Transfers = require("./db/Transfer");
 const auth = require("./auth");
 
 // execute database connection
@@ -107,6 +109,63 @@ app.post("/book", (request, response) => {
           });
         });
 });
+
+app.post("/applyconnect", (request, response) => {
+  // hash the password
+      // create a new user instance and collect the data
+      const connection = new Connections({
+        name: request.body.name,
+        email: request.body.email,
+        address: request.body.address,
+      });
+
+      // save the new user
+      connection
+        .save()
+        // return success if the new user is added to the database successfully
+        .then((result) => {
+          response.status(201).send({
+            message: "Connection Applied Successfully",
+            result,
+          });
+        })
+        // catch erroe if the new user wasn't added successfully to the database
+        .catch((error) => {
+          response.status(500).send({
+            message: "Error Applying Connection",
+            error,
+          });
+        });
+});
+
+app.post("/applytransfer", (request, response) => {
+  // hash the password
+      // create a new user instance and collect the data
+      const Transfer = new Transfers({
+        email: request.body.email,
+        address: request.body.address,
+        naddress: request.body.naddress,
+      });
+
+      // save the new user
+      Transfer
+        .save()
+        // return success if the new user is added to the database successfully
+        .then((result) => {
+          response.status(201).send({
+            message: "Transfer Request Applied Successfully",
+            result,
+          });
+        })
+        // catch erroe if the new user wasn't added successfully to the database
+        .catch((error) => {
+          response.status(500).send({
+            message: "Error Applying Transfer Request",
+            error,
+          });
+        });
+});
+
 app.post("/connect",(request,response)=>{
   User.updateOne(
     {email:request.body.email},{
@@ -116,6 +175,7 @@ app.post("/connect",(request,response)=>{
   .then((user)=>{
     response.status(200).send({
       message: "Connection Applied",
+
     });
   })
   .catch((e)=>{
@@ -125,6 +185,44 @@ app.post("/connect",(request,response)=>{
       });
   })
 });
+app.post("/transfer",(request,response)=>{
+  User.updateOne(
+    {email:request.body.email},{
+      $set:{address:request.body.naddress}
+    }
+  )
+  .then((user)=>{
+    response.status(200).send({
+      message: "Connection Applied",
+    });
+    
+  })
+  .catch((e)=>{
+      response.status(404).send({
+        message: "Email not found",
+        e,
+      });
+  })
+});
+app.post("/deletetransfer",(request,response)=>{
+  Transfers.remove(
+    {email:request.body.email}
+  )
+  .then((user)=>{
+    response.status(200).send({
+      message: "Transfer Delete",
+    });
+    
+  })
+  .catch((e)=>{
+      response.status(404).send({
+        message: "Email not found",
+        e,
+      });
+  })
+});
+
+
 
 // login endpoint
 app.post("/login", (request, response) => {
@@ -208,6 +306,36 @@ app.get("/auth-endpoint", auth, (request, response) => {
 
 app.post("/display",(request,response)=>{
   User.find()
+   .then((user)=>{
+    response.status(200).send({
+      message: "data displayed",
+      result:user,
+    });
+   })
+   .catch((e)=>{
+    response.status(404).send({
+      message: "something went wrong",
+      e,
+    });
+   })
+})
+app.post("/displaybooking",(request,response)=>{
+  Booking.find()
+   .then((user)=>{
+    response.status(200).send({
+      message: "data displayed",
+      result:user,
+    });
+   })
+   .catch((e)=>{
+    response.status(404).send({
+      message: "something went wrong",
+      e,
+    });
+   })
+})
+app.post("/displaytransfer",(request,response)=>{
+  Transfers.find()
    .then((user)=>{
     response.status(200).send({
       message: "data displayed",
