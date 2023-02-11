@@ -371,6 +371,21 @@ app.post("/displaytransfer",(request,response)=>{
     });
    })
 })
+app.post("/displayconnections",(request,response)=>{
+  Connections.find()
+   .then((user)=>{
+    response.status(200).send({
+      message: "data displayed",
+      result:user,
+    });
+   })
+   .catch((e)=>{
+    response.status(404).send({
+      message: "something went wrong",
+      e,
+    });
+   })
+})
 
 
 
