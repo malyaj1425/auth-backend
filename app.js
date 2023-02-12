@@ -204,6 +204,23 @@ app.post("/transfer",(request,response)=>{
       });
   })
 });
+app.post("/deleteconnect",(request,response)=>{
+  Connections.remove(
+    {email:request.body.email}
+  )
+  .then((user)=>{
+    response.status(200).send({
+      message: "Transfer Deleted",
+    });
+    
+  })
+  .catch((e)=>{
+      response.status(404).send({
+        message: "Email not found",
+        e,
+      });
+  })
+});
 app.post("/deletetransfer",(request,response)=>{
   Transfers.remove(
     {email:request.body.email}
